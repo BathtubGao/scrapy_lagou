@@ -10,7 +10,7 @@ class LagouSpider(scrapy.Spider):
     # 设定域名
     allowed_domains = ["lagou.com"]
     # 填写爬取地址
-    start_urls = ["https://www.lagou.com/jobs/positionAjax.json?px=default&city=%E5%8D%97%E4%BA%AC&needAddtionalResult=false"]
+    start_urls = ["http://www.lagou.com/jobs/positionAjax.json?px=default&city=%E5%8D%97%E4%BA%AC&needAddtionalResult=false"]
     # http头
     headers = {
         'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -61,17 +61,19 @@ class LagouSpider(scrapy.Spider):
         'kd': 'Java'
     }
 
-    meta = {
-        'dont_redirect': True,
-        'handle_httpstatus_list': [302]
-    }
+    # 禁止重定向请求
+    # meta = {
+    #     'dont_redirect': True,
+    #     'handle_httpstatus_list': [302]
+    # }
 
     def start_requests(self):
         # 带着cookie向网站服务器发请求，表明我们是一个已登录的用户
         return [FormRequest(self.start_urls[0], method='POST', formdata=self.formdata, callback=self.parse,
-                        meta=self.meta, cookies=self.cookies, headers=self.headers)]
+                            cookies=self.cookies, headers=self.headers)]
 
     def parse(self, response):
-        print('###########################')
-        sites = json.loads(response.body.decode('gbk').encode('utf-8'))
-        print(sites)
+        print('#######')
+        # print(response.body)
+        # sites = json.loads(response.body.decode('utf-8'))
+        # print(sites)
